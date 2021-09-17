@@ -26,7 +26,7 @@ void	Server::createSocket(void){
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags    = AI_PASSIVE;
 	if (getaddrinfo(_host.c_str(), _port.c_str(), &hints, &servinfo) != 0)
-		throw runtime_error("error: getaddrinfo");
+		Announcement::Fatal("error: getaddrinfo");
 
 	addrinfo	*p;
 	int			sock;
@@ -40,7 +40,7 @@ void	Server::createSocket(void){
 		{
 			close(sock);
 			freeaddrinfo(servinfo);
-			throw runtime_error("error: setsockopt");
+			Announcement::Fatal("error: setsockopt");
 		}
 		if (bind(sock, p->ai_addr, p->ai_addrlen) == -1)
 		{
@@ -51,9 +51,9 @@ void	Server::createSocket(void){
 	}
 	freeaddrinfo(servinfo);
 	if (p == nullptr)
-		throw runtime_error("error: failed to find address");
+		Announcement::Fatal("error: failed to find address");
 	if (listen(sock, MAX_CONNECTION) == -1)
-		throw runtime_error("error: listen");
+		Announcement::Fatal("error: listen");
 
 	_sock = sock;
 }
@@ -61,7 +61,7 @@ void	Server::createSocket(void){
 void Server::start(void){
 	pollfd	newPollfd = {_sock, POLLIN, 0};
 	if (fcntl(_sock, F_SETFL, O_NONBLOCK) == -1)
-	 	throw runtime_error("Error: poll: fcntl");
+	 	Announcement::Fatal("Error: poll: fcntl");
 	
 	vector<pollfd>::iterator	iterPoll;
 	_pollFds.push_back(newPollfd);
@@ -71,6 +71,6 @@ void Server::start(void){
 	while (1 == 1){
 		iterPoll = _pollFds.begin();
 		if (poll(&(*iterPoll), _pollFds.size(), -1) == -1)
-			throw std::runtime_error("Error: poll");
+			Announcement::Fatal("Error: poll");
 	}
 }
