@@ -31,4 +31,4 @@ re : fclean all
 
 com : fclean
 	git add .
-	git commit -m "replay"
+	git commit -m "PrivMsg"

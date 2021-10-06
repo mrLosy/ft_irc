@@ -34,8 +34,9 @@ void CmdPrivmsg::cmdRun()
             Client *toClient = _server->getClient(_args[1]);
             if (!toClient)
                 throw CmdPrivmsg::UserDoesNotExist();
-            _client->sendMessageToClient("Message sending.\n");
-            toClient->sendMessageToClient(msg);
+            // _client->sendMessageToClient("Message sending.\n");
+            std::string toClientStr = toClient->getNick();
+            toClient->sendMessageToClient(":" + toClientStr + " " + "PRIVMSG " + toClientStr + " :" + msg + "\r\n");
             if (toClient->getAwayMessage().size() != 0)
             {
                 std::string awayMsg;
@@ -48,13 +49,13 @@ void CmdPrivmsg::cmdRun()
 
 std::string CmdPrivmsg::createMsg()
 {
-    std::string msg = _client->getNick() + ": ";
+    std::string msg;
     for (size_t i = 2; i < _args.size(); i++)
     {
         msg = msg + _args[i];
         if (i + 1 != _args.size())
             msg += " ";
     }
-    msg += "\n";
+    // msg += "\n";
     return msg;
 }
