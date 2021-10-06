@@ -24,8 +24,7 @@ void CmdNick::cmdRun()
     {
         _client->setNick(_args[1]);
         _client->sendMessageToClient(
-            "You changed the nickname to \"" 
-            + _client->getNick() + "\"\n"
+            ":" + _client->getNick() + " " + "NICK " + _client->getNick() + "\r\n"
         );
     }
 }

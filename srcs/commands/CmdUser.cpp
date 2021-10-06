@@ -25,7 +25,7 @@ void CmdUser::cmdRun()
         _client->setNick(_args[1]);
         _client->setRealname(_args[4]);
         _client->setRegistered(1);
-        string msgToClient = "User " + _client->getNick() + " is registered.\n";
-        _client->sendMessageToClient(msgToClient);
+        // string msgToClient = "User " + _client->getNick() + " is registered.\n";
+        // _client->sendMessageToClient(msgToClient);
     }
 }
