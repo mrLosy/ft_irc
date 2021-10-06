@@ -81,15 +81,19 @@ void Server::start(void){
 	pollfd	newPollfd = {_sock, POLLIN, 0};
 	pollfd	ptrPollfd;
 
+	_Commander = new Commander(this);
 	if (fcntl(_sock, F_SETFL, O_NONBLOCK) == -1)
 	 	Announcement::Fatal("Error: poll: fcntl");
 	
 	vector<pollfd>::iterator	iterPoll;
 	_pollfds.push_back(newPollfd);
 
+
+
 	cout << "Server created!" << endl;
 
-	while (1){
+	while (1)
+	{
 		iterPoll = _pollfds.begin();
 		if (poll(&(*iterPoll), _pollfds.size(), -1) == -1)
 			Announcement::Fatal("Error: poll");
@@ -112,7 +116,7 @@ void Server::start(void){
 			{
 				if (ptrPollfd.fd == _sock)
 				{
-					string str("PASS NICK USER\n\r");
+					string str("Entered:\nPASS <password>\nNICK <nickname>\nUSER <username> <flags> <unused> <realname>\n\r");
 						if (send(createClient(), str.c_str(), str.length(), 0) == -1)
 							Announcement::Fatal("Error: send");
 					break ;
@@ -121,9 +125,12 @@ void Server::start(void){
 				{
 					vector<Client *>::iterator	itClient = _clients.begin();
 					advance(itClient, distance(_pollfds.begin(), itPollfd) - 1);
-					ssize_t byteRecv = recvMessage(*itClient);
+					ssize_t byteRecv = recvMessage(*itClient); //del byteRecv ? 
+					
 					(void)byteRecv;
-
+					
+					// cout << (*itClient)->getMessage() << endl;
+					_Commander->parse((*itClient), (*itClient)->getMessage());
 				}
 			}
 		}
@@ -136,7 +143,7 @@ int		Server::recvMessage(Client *client){
 
 	client->clearMessage();
 	memset(message, '\0', sizeof(message));
-	while (!std::strstr(message, "\n\r"))
+	while (!std::strstr(message, "\r\n"))
 	{
 		memset(message, '\0', sizeof(message));
 		byteRecved = recv(client->getSockFd(), message, sizeof(message), 0);
@@ -195,4 +202,66 @@ int		Server::createClient(void){
 
 	cout << "New client " << newClient->getNick() << "@" << newClient->getHost() << ":" << newClient->getPort() << endl;
 	return client_d;
+}
+
+bool	Server::checkClientPass(string str)
+{
+	if (str != _pass)
+		return 0;
+	return 1;
+}
+
+void	Server::createChannel(string channelName)
+{
+	_channels.push_back(new Channel(channelName));
+}
+
+Client	*Server::getClient(string clientName)
+{
+	for (vector<Client*>::const_iterator i = _clients.begin(); i != _clients.end(); ++i)
+	{
+		if ((*i)->getNick() == clientName)
+			return (*i);
+	}
+	return nullptr;
+}
+
+bool	Server::checkExistChannel(string channelName)
+{
+	for (vector<Channel*>::const_iterator i = _channels.begin(); i != _channels.end(); ++i)
+	{
+		if ((*i)->getChannelName() == channelName)
+			return true;
+	}
+	return false;
+}
+
+bool	Server::checkExistClient(string clientName)
+{
+	for (vector<Client*>::const_iterator i = _clients.begin(); i != _clients.end(); ++i)
+	{
+		if ((*i)->getNick() == clientName)
+			return true;
+	}
+	return false;
+}
+
+Channel	*Server::getChannel(string channelName)
+{
+	for (vector<Channel*>::const_iterator i = _channels.begin(); i != _channels.end(); ++i)
+	{
+		if ((*i)->getChannelName() == channelName)
+			return (*i);
+	}
+	return nullptr;
+}
+
+vector<Channel*> Server::getAllChannels()
+{
+	return _channels;
+}
+
+vector<Client*>	Server::getAllClients()
+{
+	return _clients;
 }

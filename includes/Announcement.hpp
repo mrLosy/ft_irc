@@ -1,3 +1,6 @@
+#ifndef ANNOUNCEMENT_HPP
+#define ANNOUNCEMENT_HPP
+
 #include <iostream>
 
 #include <cerrno>
@@ -7,9 +10,11 @@
 class Announcement{
 
 private:
-		Announcement();
+		Announcement() {};
 public:
-		~Announcement();
+		~Announcement() {};
 
 		static void Fatal(std::string str, int exitCode = 1);
 };
+
+#endif
