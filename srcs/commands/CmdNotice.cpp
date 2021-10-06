@@ -23,19 +23,22 @@ void CmdNotice::cmdRun()
         std::string msg = createMsg();
         if (_args[1][0] == '#' || _args[1][0] == '&')
         {
+            Client *toClient = _server->getClient(_args[1]);
             Channel *toChannel = _server->getChannel(_args[1]);
             if (!toChannel)
                 throw CmdNotice::ChannelDoesNotExist();
-            _client->sendMessageToClient("Message sending.\n");
-            toChannel->sendMessageToChannel(msg);
+            // _client->sendMessageToClient("Message sending.\n");
+            std::string toClientStr = toClient->getNick();
+            toChannel->sendMessageToChannel(":" + toClientStr + " NOTICE #" + toChannel->getChannelName() + msg);
         }
         else
         {
             Client *toClient = _server->getClient(_args[1]);
             if (!toClient)
                 throw CmdNotice::UserDoesNotExist();
-            _client->sendMessageToClient("Message sending.\n");
-            toClient->sendMessageToClient(msg);
+            // _client->sendMessageToClient("Message sending.\n");
+            std::string toClientStr = toClient->getNick(); 
+            toClient->sendMessageToClient(":" + toClientStr + " NOTICE " + toClientStr + msg + "\r\n");
         }
     }
 }

@@ -25,16 +25,14 @@ void CmdPart::cmdRun()
             throw CmdPart::NoSuchChannelException();
         channel->removeClient(_client->getNick());
         channel->sendMessageToChannel(
-            "Client " +
-            _client->getNick() +
-            " left channel " +
-            channel->getChannelName() +
-            "\n"
+            ":" + _client->getNick() +
+            " " + "PART" + " #" +
+            channel->getChannelName()
         );
-        _client->sendMessageToClient(
-            "You have left the channel: \"" + 
-            channel->getChannelName() + "\"\n"
-        );
+        // _client->sendMessageToClient(
+        //     "You have left the channel: \"" + 
+        //     channel->getChannelName() + "\"\n"
+        // );
     }
 }
 

@@ -21,7 +21,8 @@ void CmdPass::cmdRun()
 	else
 	{
 		_client->setEnterPassword(1);
-		_client->sendMessageToClient("Correct password!\n");
+		string nick = _client->getNick();
+		_client->sendMessageToClient(":" + nick + " PASS Correct password\r\n");
 	}
 }
 

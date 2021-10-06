@@ -23,11 +23,12 @@ void CmdPrivmsg::cmdRun()
         std::string msg = createMsg();
         if (_args[1][0] == '#' || _args[1][0] == '&')
         {
+            Client *toClient = _server->getClient(_args[1]);
             Channel *toChannel = _server->getChannel(_args[1]);
             if (!toChannel)
                 throw CmdPrivmsg::ChannelDoesNotExist();
-            _client->sendMessageToClient("Message sending.\n");
-            toChannel->sendMessageToChannel(msg);
+            std::string toClientStr = toClient->getNick();
+            toChannel->sendMessageToChannel(":" + toClientStr + " PRIVMSG #" + toChannel->getChannelName() + msg);
         }
         else
         {
@@ -36,13 +37,13 @@ void CmdPrivmsg::cmdRun()
                 throw CmdPrivmsg::UserDoesNotExist();
             // _client->sendMessageToClient("Message sending.\n");
             std::string toClientStr = toClient->getNick();
-            toClient->sendMessageToClient(":" + toClientStr + " " + "PRIVMSG " + toClientStr + " :" + msg + "\r\n");
-            if (toClient->getAwayMessage().size() != 0)
-            {
-                std::string awayMsg;
-                awayMsg = toClient->getNick() + "(away): " + toClient->getAwayMessage();
-                _client->sendMessageToClient(awayMsg);
-            }
+            toClient->sendMessageToClient(":" + toClientStr + " PRIVMSG " + toClientStr +  msg);
+            // if (toClient->getAwayMessage().size() != 0)
+            // {
+            //     std::string awayMsg;
+            //     awayMsg = toClient->getNick() + "(away): " + toClient->getAwayMessage();
+            //     _client->sendMessageToClient(awayMsg);
+            // }
         }
     }
 }
