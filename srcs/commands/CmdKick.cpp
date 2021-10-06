@@ -28,12 +28,15 @@ void CmdKick::cmdRun()
         Client *toClient = _server->getClient(_args[2]);
         if (!toClient)
             throw CmdKick::UserDoesNotExist();
-        _client->sendMessageToClient(
-            "You kick client: \"" + 
-            toClient->getNick() +
-            "\" from the channel: \"" +
-            toChannel->getChannelName() +
-            "\"\n"
+        // _client->sendMessageToClient(
+        //     "You kick client: \"" + 
+        //     toClient->getNick() +
+        //     "\" from the channel: \"" +
+        //     toChannel->getChannelName() +
+        //     "\"\n"
+        // );
+        toChannel->sendMessageToChannel(
+            ":" + toClient->getNick() + " " + "KICK #" + toChannel->getChannelName() + " : kicked " + toClient->getNick() + "\r\n"
         );
         toChannel->removeClient(toClient->getNick());
     }

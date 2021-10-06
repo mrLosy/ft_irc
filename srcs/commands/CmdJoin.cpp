@@ -31,10 +31,13 @@ void CmdJoin::cmdRun()
         if (channel->checkExistClient(_client->getNick()))
             throw CmdJoin::AlreadyOnTheChannel();
         channel->setClient(_client);
+        // channel->sendMessageToChannel(
+        //     "User " + _client->getNick() +
+        //     " join to " +
+        //     channel->getChannelName() + "\r\n"
+        // );
         channel->sendMessageToChannel(
-            "User " + _client->getNick() +
-            " join to " +
-            channel->getChannelName() + "\r\n"
+            ":" + _client->getNick() + " " + "JOIN" + " #" + channel->getChannelName()
         );
     }
 }
