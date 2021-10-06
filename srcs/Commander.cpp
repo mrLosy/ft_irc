@@ -53,7 +53,7 @@ void Commander::parse(Client *client, string msg)
 	// }
 	if (!arg.empty())
 	{
-		
+		cout << "@" << _client->getNick() << " " << msg;
 		for (vector<Command*>::const_iterator iterCmd = commands.begin(); iterCmd != commands.end(); ++iterCmd)
 		{
 			// cout <<  "'" + (*iterCmd)->getName() + "'" << " " << "'" + arg[0] + "'" << endl; //del

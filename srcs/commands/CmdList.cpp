@@ -12,16 +12,16 @@ CmdList::~CmdList()
 
 void CmdList::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdList::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdList::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdList::NoRegistered();
     else
     {
         std::vector<Channel*> channel = _server->getAllChannels();
         for (std::vector<Channel*>::const_iterator i = channel.begin(); i != channel.end(); i++)
         {
-            _client->sendMessageToClient("322 * #" + (*i)->getChannelName() + " " + std::to_string((*i)->getClients().size()) + "\r\n");
+            _client->sendMessageToClient("322 * " + (*i)->getChannelName() + " " + std::to_string((*i)->getClients().size()) + "\r\n");
             // _client->sendMessageToClient((*i)->getChannelName() + " ");
         }
         _client->sendMessageToClient("323 * :End of LIST\r\n");

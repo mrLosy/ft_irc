@@ -12,9 +12,9 @@ CmdJoin::~CmdJoin()
 
 void CmdJoin::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdJoin::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdJoin::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdJoin::NoRegistered();
     else if (_args.size() != 2 && _args.size() != 3)
         throw CmdJoin::InvalidNumOfArgs();
@@ -37,7 +37,7 @@ void CmdJoin::cmdRun()
         //     channel->getChannelName() + "\r\n"
         // );
         channel->sendMessageToChannel(
-            ":" + _client->getNick() + " " + "JOIN" + " #" + channel->getChannelName()
+            ":" + _client->getNick() + " " + "JOIN" + " " + channel->getChannelName()
         );
     }
 }

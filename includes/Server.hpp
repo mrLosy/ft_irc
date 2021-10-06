@@ -61,6 +61,8 @@ public:
 		Channel					*getChannel(std::string channelName);
 		std::vector<Channel*>	getAllChannels();
 		std::vector<Client*>	getAllClients();
+		std::string				getHost();
+		// void					sendMessageToClient(std::string message);
 };
 
 #endif

@@ -12,9 +12,9 @@ CmdKick::~CmdKick()
 
 void CmdKick::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdKick::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdKick::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdKick::NoRegistered();
     else if (_args.size() != 3)
         throw CmdKick::InvalidNumOfArgs();

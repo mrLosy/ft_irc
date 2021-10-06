@@ -12,9 +12,9 @@ CmdPrivmsg::~CmdPrivmsg()
 
 void CmdPrivmsg::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdPrivmsg::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdPrivmsg::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdPrivmsg::NoRegistered();
     else if (_args.size() < 3)
         throw CmdPrivmsg::InvalidNumOfArgs();
@@ -28,7 +28,7 @@ void CmdPrivmsg::cmdRun()
             if (!toChannel)
                 throw CmdPrivmsg::ChannelDoesNotExist();
             std::string toClientStr = toClient->getNick();
-            toChannel->sendMessageToChannel(":" + toClientStr + " PRIVMSG #" + toChannel->getChannelName() + msg);
+            toChannel->sendMessageToChannel(":" + toClientStr + " PRIVMSG #" + toChannel->getChannelName() + msg + "\r\n");
         }
         else
         {
@@ -37,7 +37,7 @@ void CmdPrivmsg::cmdRun()
                 throw CmdPrivmsg::UserDoesNotExist();
             // _client->sendMessageToClient("Message sending.\n");
             std::string toClientStr = toClient->getNick();
-            toClient->sendMessageToClient(":" + toClientStr + " PRIVMSG " + toClientStr +  msg);
+            toClient->sendMessageToClient(":" + toClientStr + " PRIVMSG " + toClientStr + " :" + msg + "\r\n");
             // if (toClient->getAwayMessage().size() != 0)
             // {
             //     std::string awayMsg;

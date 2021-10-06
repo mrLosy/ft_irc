@@ -3,7 +3,7 @@
 using namespace std;
 
 Client::Client(int sockFd, int port, Server *serv, char *host) : _sockFd(sockFd), _port(port), _host(host){
-	_nickname = "unknown";
+	_nickname = "";
 	_isOperator = false;
 	_awayMessage = "";
 	// _channel = nullptr;
@@ -25,5 +25,6 @@ void			Client::appendMessage(string message)
 
 void		Client::sendMessageToClient(std::string message)
 {
+	cout << "'" + message + "'" << endl;
 	send(_sockFd, message.c_str(), message.length(), 0);
 }

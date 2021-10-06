@@ -12,9 +12,9 @@ CmdNotice::~CmdNotice()
 
 void CmdNotice::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdNotice::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdNotice::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdNotice::NoRegistered();
     else if (_args.size() < 3)
         throw CmdNotice::InvalidNumOfArgs();
@@ -37,7 +37,7 @@ void CmdNotice::cmdRun()
             if (!toClient)
                 throw CmdNotice::UserDoesNotExist();
             // _client->sendMessageToClient("Message sending.\n");
-            std::string toClientStr = toClient->getNick(); 
+            std::string toClientStr = toClient->getNick();
             toClient->sendMessageToClient(":" + toClientStr + " NOTICE " + toClientStr + msg + "\r\n");
         }
     }

@@ -14,9 +14,9 @@ CmdUser::~CmdUser()
 
 void CmdUser::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdUser::NoPasswordEntered();
-    else if (_args.size() < 5)
+    // if (!_client->getEnterPassword())
+    //     throw CmdUser::NoPasswordEntered();
+    if (_args.size() < 5)
         throw CmdUser::InvalidNumOfArgs();
     else if (_server->checkExistClient(_args[1]) && _server->getClient(_args[1])->getRegistered())
         throw CmdUser::ClientWithThisNickRegistered();

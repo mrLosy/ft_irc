@@ -14,16 +14,16 @@ CmdPass::~CmdPass()
 
 void CmdPass::cmdRun()
 {
-	if (_args.size() != 2)
-		throw CmdPass::InvalidNumOfArgs();
-	if (!_server->checkClientPass(_args[1]))
-		throw CmdPass::IncorrectPasswordException();
-	else
-	{
+	// if (_args.size() != 2)
+	// 	throw CmdPass::InvalidNumOfArgs();
+	// if (!_server->checkClientPass(_args[1]))
+	// 	throw CmdPass::IncorrectPasswordException();
+	// else
+	// {
 		_client->setEnterPassword(1);
 		string nick = _client->getNick();
-		_client->sendMessageToClient(":" + nick + " PASS Correct password\r\n");
-	}
+		_client->sendMessageToClient(":" + _server->getHost() + " PASS Correct password\r\n");
+	// }
 }
 
 const char *CmdPass::IncorrectPasswordException::what() const throw()

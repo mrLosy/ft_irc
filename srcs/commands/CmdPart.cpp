@@ -12,9 +12,9 @@ CmdPart::~CmdPart()
 
 void CmdPart::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdPart::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdPart::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdPart::NoRegistered();
     else if (_args.size() != 2)
         throw CmdPart::InvalidNumOfArgs();

@@ -12,9 +12,9 @@ CmdAway::~CmdAway()
 
 void CmdAway::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdAway::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdAway::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdAway::NoRegistered();
     else
     {

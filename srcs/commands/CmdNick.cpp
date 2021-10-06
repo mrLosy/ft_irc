@@ -14,9 +14,9 @@ CmdNick::~CmdNick()
 
 void CmdNick::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdNick::NoPasswordEntered();
-    else if (_args.size() < 1)
+    // if (!_client->getEnterPassword())
+    //     throw CmdNick::NoPasswordEntered();
+    if (_args.size() < 1)
         throw CmdNick::InvalidNumOfArgs();
     else if (_server->checkExistClient(_args[1]))
         throw CmdNick::ClientWithThisNickExists();

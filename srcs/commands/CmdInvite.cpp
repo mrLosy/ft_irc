@@ -12,9 +12,9 @@ CmdInvite::~CmdInvite()
 
 void CmdInvite::cmdRun()
 {
-    if (!_client->getEnterPassword())
-        throw CmdInvite::NoPasswordEntered();
-    else if (!_client->getRegistered())
+    // if (!_client->getEnterPassword())
+    //     throw CmdInvite::NoPasswordEntered();
+    if (!_client->getRegistered())
         throw CmdInvite::NoRegistered();
     else if (_args.size() != 3)
         throw CmdInvite::InvalidNumOfArgs();

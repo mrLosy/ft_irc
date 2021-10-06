@@ -265,3 +265,8 @@ vector<Client*>	Server::getAllClients()
 {
 	return _clients;
 }
+
+string	Server::getHost()
+{
+	return _host;
+}
