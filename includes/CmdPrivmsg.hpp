@@ -9,7 +9,6 @@ class CmdPrivmsg : public Command
         CmdPrivmsg();
         ~CmdPrivmsg();
         void cmdRun();
-        std::string createMsg();
 };
 
 #endif

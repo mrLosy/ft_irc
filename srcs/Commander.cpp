@@ -13,6 +13,8 @@
 #include "CmdPrivmsg.hpp"
 #include "CmdList.hpp"
 #include "CmdNames.hpp"
+#include "CmdWho.hpp"
+#include "CmdTime.hpp"
 
 using namespace std;
 
@@ -33,6 +35,8 @@ Commander::Commander(Server *server)
 	commands.push_back(new CmdAway());
 	commands.push_back(new CmdList());
 	commands.push_back(new CmdNames());
+	commands.push_back(new CmdWho());
+	commands.push_back(new CmdTime());
 }
 
 Commander::~Commander()
@@ -43,20 +47,13 @@ Commander::~Commander()
 
 void Commander::parse(Client *client, string msg)
 {
-
-	// cout << "|" + msg + "|" << endl; //del
 	vector<string> arg = splitMsg(msg);
 	_client = client;
-	// for (vector<string>::const_iterator i = arg.begin(); i != arg.end(); ++i)
-	// {
-	// 	cout << *i << endl;
-	// }
 	if (!arg.empty())
 	{
 		cout << "@" << _client->getNick() << " " << msg;
 		for (vector<Command*>::const_iterator iterCmd = commands.begin(); iterCmd != commands.end(); ++iterCmd)
 		{
-			// cout <<  "'" + (*iterCmd)->getName() + "'" << " " << "'" + arg[0] + "'" << endl; //del
 			if (arg[0] == (*iterCmd)->getName())
 			{
 				(*iterCmd)->setClient(client);
@@ -66,9 +63,19 @@ void Commander::parse(Client *client, string msg)
 				{
 					(*iterCmd)->cmdRun();
 				}
-				catch(const std::exception& e)
+				catch(const exception& e)
 				{
-					_client->sendMessageToClient(e.what());
+					cout << "'" + string(e.what()) + "'" << endl;
+					client->sendMessageToClient(string(e.what()));
+				}
+				catch (const char* message)
+				{
+					string str = string(message);
+					_client->sendMessageToClient(str);
+				}
+				catch(string message)
+				{
+					_client->sendMessageToClient(message);
 				}
 				break;
 			}

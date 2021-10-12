@@ -1,6 +1,5 @@
 #include "../includes/Server.hpp"
-
-using namespace std;
+#include "Define.hpp"
 
 Server::Server(string host, string port, string pass) : _host(host), _port(port), _pass(pass) {
 	stringstream stream;
@@ -107,8 +106,6 @@ void Server::start(void){
 
 				if (_clients.empty())
 					break;
-        	    cout << "disconnect not registered Client" << endl;
-        	    this->deleteClient((*itClient)->getId());
         	    break;
         	}
 
@@ -125,11 +122,7 @@ void Server::start(void){
 				{
 					vector<Client *>::iterator	itClient = _clients.begin();
 					advance(itClient, distance(_pollfds.begin(), itPollfd) - 1);
-					ssize_t byteRecv = recvMessage(*itClient); //del byteRecv ? 
-					
-					(void)byteRecv;
-					
-					// cout << (*itClient)->getMessage() << endl;
+					recvMessage(*itClient);
 					_Commander->parse((*itClient), (*itClient)->getMessage());
 				}
 			}
@@ -137,7 +130,7 @@ void Server::start(void){
 	}
 }
 
-int		Server::recvMessage(Client *client){
+void	Server::recvMessage(Client *client){
 	ssize_t		byteRecved;
 	char		message[100];
 
@@ -151,10 +144,10 @@ int		Server::recvMessage(Client *client){
 			break ;
 		client->appendMessage(message);
 	}
-	return (byteRecved);
 }
 
-void	Server::deleteClient(string id){
+void	Server::deleteClient(string id)
+{
 	int socketClient = this->getIdClient(id)->getSockFd();
 	
 	vector<pollfd>::iterator	it = _pollfds.begin();
@@ -175,7 +168,7 @@ void	Server::deleteClient(string id){
 	{
 		if ((*itC)->getId() == id)
 		{
-            delete (*itC);
+			close((*itC)->getSockFd());
             _clients.erase(itC);
             break ;
 		}
@@ -266,7 +259,7 @@ vector<Client*>	Server::getAllClients()
 	return _clients;
 }
 
-string	Server::getHost()
+string	Server::getPass()
 {
-	return _host;
+	return _pass;
 }

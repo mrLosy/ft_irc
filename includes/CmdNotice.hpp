@@ -9,7 +9,6 @@ class CmdNotice : public Command
         CmdNotice();
         ~CmdNotice();
         void cmdRun();
-        std::string createMsg();
 };
 
 #endif

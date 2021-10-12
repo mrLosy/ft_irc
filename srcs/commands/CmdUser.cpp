@@ -1,6 +1,5 @@
 #include "CmdUser.hpp"
-
-using namespace std;
+#include "Define.hpp"
 
 CmdUser::CmdUser()
 {
@@ -14,18 +13,14 @@ CmdUser::~CmdUser()
 
 void CmdUser::cmdRun()
 {
-    // if (!_client->getEnterPassword())
-    //     throw CmdUser::NoPasswordEntered();
     if (_args.size() < 5)
-        throw CmdUser::InvalidNumOfArgs();
-    else if (_server->checkExistClient(_args[1]) && _server->getClient(_args[1])->getRegistered())
-        throw CmdUser::ClientWithThisNickRegistered();
+        throw ERR_NEEDMOREPARAMS(_args[0]);
+    if (_client->getRegistered())
+        throw ERR_ALREADYREGISTRED;
     else
     {
         _client->setNick(_args[1]);
         _client->setRealname(_args[4]);
-        _client->setRegistered(1);
-        // string msgToClient = "User " + _client->getNick() + " is registered.\n";
-        // _client->sendMessageToClient(msgToClient);
+        _client->registered();
     }
 }

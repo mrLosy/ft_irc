@@ -14,15 +14,5 @@ CmdQuit::~CmdQuit()
 
 void CmdQuit::cmdRun()
 {
-	// if (_args.size() > 1)
-	// {
-	// 	vector<string>::const_iterator i = _args.begin();
-	// 	i++;
-	// 	while (i != _args.end())
-	// 	{
-	// 		_client->sendMessageToClient(*i + " ");
-	// 		i++;
-	// 	}
-	// }
 	_server->deleteClient(_client->getId());
 }

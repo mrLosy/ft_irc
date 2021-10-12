@@ -1,4 +1,5 @@
 #include "CmdPart.hpp"
+#include "Define.hpp"
 
 CmdPart::CmdPart()
 {
@@ -12,31 +13,23 @@ CmdPart::~CmdPart()
 
 void CmdPart::cmdRun()
 {
-    // if (!_client->getEnterPassword())
-    //     throw CmdPart::NoPasswordEntered();
     if (!_client->getRegistered())
-        throw CmdPart::NoRegistered();
-    else if (_args.size() != 2)
-        throw CmdPart::InvalidNumOfArgs();
+        throw ERR_RESTRICTED;
+    else if (_args.size() < 2)
+        throw ERR_NEEDMOREPARAMS(_args[0]);
     else
     {
         Channel *channel = _server->getChannel(_args[1]);
         if (!channel)
-            throw CmdPart::NoSuchChannelException();
+            throw ERR_NOSUCHCHANNEL(_args[1]);
+        if (!channel->getClient(_client->getNick()))
+            throw ERR_NOTONCHANNEL(_args[1]);
         channel->removeClient(_client->getNick());
         channel->sendMessageToChannel(
             ":" + _client->getNick() +
             " " + "PART" + " #" +
-            channel->getChannelName()
+            channel->getChannelName(),
+            _client->getNick()
         );
-        // _client->sendMessageToClient(
-        //     "You have left the channel: \"" + 
-        //     channel->getChannelName() + "\"\n"
-        // );
     }
-}
-
-const char* CmdPart::NoSuchChannelException::what() const throw()
-{
-    return "No such channel!\n";
 }

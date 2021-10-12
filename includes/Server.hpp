@@ -20,9 +20,6 @@
 # include "Commander.hpp"
 # include "Channel.hpp"
 
-# define MAX_CONNECTION	1024
-# define LOCALHOST "127.0.0.1"
-
 class Client;
 class Commander;
 class Channel;
@@ -38,7 +35,6 @@ private:
 		std::vector<Client *>	_clients;
 		std::vector<Channel *>	_channels;
 		int						_id[3];
-
 		Commander				*_Commander;
 
 public:
@@ -52,17 +48,16 @@ public:
 		void					start(void);
 		void					deleteClient(std::string id);
 		int						createClient(void);
-		int						recvMessage(Client *client);
+		void					recvMessage(Client *client);
 		bool					checkClientPass(std::string str);
 		void					createChannel(std::string channelName);
 		bool					checkExistChannel(std::string channelName);
 		bool					checkExistClient(std::string clientNickname);
+		std::string				getPass();
 		Client					*getClient(std::string clientName);
 		Channel					*getChannel(std::string channelName);
 		std::vector<Channel*>	getAllChannels();
 		std::vector<Client*>	getAllClients();
-		std::string				getHost();
-		// void					sendMessageToClient(std::string message);
 };
 
 #endif

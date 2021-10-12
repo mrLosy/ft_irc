@@ -30,6 +30,8 @@ class Command
 		void			setArgs(std::vector<std::string> args);
 		void			setServer(Server *server);
 		virtual void	cmdRun() = 0;
+		std::string		createMsg();
+
 		class InvalidNumOfArgs : public std::exception
 		{
 			const char* what() const throw();	
@@ -38,7 +40,7 @@ class Command
 		{
 			const char* what() const throw();
 		};
-		class NoRegistered : public std::exception
+		class ERR_RESTRICTED : public std::exception
 		{
 			const char* what() const throw();
 		};
@@ -50,7 +52,7 @@ class Command
 		{
 			const char* what() const throw();
 		};
-	    class   UserDoesNotExist : public std::exception
+	    class   NickOrChannelNameError : public std::exception
 		{
 			const char* what() const throw();	
 		};

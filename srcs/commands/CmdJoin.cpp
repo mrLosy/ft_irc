@@ -1,4 +1,5 @@
 #include "CmdJoin.hpp"
+#include "Define.hpp"
 
 CmdJoin::CmdJoin()
 {
@@ -12,32 +13,29 @@ CmdJoin::~CmdJoin()
 
 void CmdJoin::cmdRun()
 {
-    // if (!_client->getEnterPassword())
-    //     throw CmdJoin::NoPasswordEntered();
     if (!_client->getRegistered())
-        throw CmdJoin::NoRegistered();
-    else if (_args.size() != 2 && _args.size() != 3)
-        throw CmdJoin::InvalidNumOfArgs();
-    else if (!checkNameChannel(_args[1]))
-        throw CmdJoin::IncorrectChannelName();
+        throw ERR_RESTRICTED;
+    else if (_args.size() < 2)
+        throw ERR_NEEDMOREPARAMS(_args[0]);
     else
     {
-        if (!_server->checkExistChannel(_args[1]))
+        if (!checkNameChannel(_args[1]))
+            throw ERR_BADCHANMASK(_args[1]);
+        Channel *channel = _server->getChannel(_args[1]);
+        if (!channel)
         {
             _server->createChannel(_args[1]);
+            channel = _server->getChannel(_args[1]);
             _client->setIsOperator(true);
+            _client->sendMessageToClient(RPL_NOTOPIC(channel->getChannelName()));
         }
-        Channel *channel = _server->getChannel(_args[1]);
-        if (channel->checkExistClient(_client->getNick()))
-            throw CmdJoin::AlreadyOnTheChannel();
+        if (channel->getClient(_client->getNick()))
+            throw ERR_TOOMANYCHANNELS(_args[1]);
         channel->setClient(_client);
-        // channel->sendMessageToChannel(
-        //     "User " + _client->getNick() +
-        //     " join to " +
-        //     channel->getChannelName() + "\r\n"
-        // );
         channel->sendMessageToChannel(
-            ":" + _client->getNick() + " " + "JOIN" + " " + channel->getChannelName()
+            ":" + _client->getNick() + " JOIN #" + 
+            channel->getChannelName() + "\r\n",
+            _client->getNick()
         );
     }
 }
@@ -49,12 +47,4 @@ bool CmdJoin::checkNameChannel(std::string name)
     return true;
 }
 
-const char *CmdJoin::IncorrectChannelName::what() const throw()
-{
-    return "Incorrect channel name!\r\n";
-}
-const char *CmdJoin::AlreadyOnTheChannel::what() const throw()
-{
-    return "you are already on the channel!\r\n";
-}
 

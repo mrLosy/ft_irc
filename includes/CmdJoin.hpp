@@ -10,15 +10,6 @@ class CmdJoin : public Command
         ~CmdJoin();
         void cmdRun();
         bool checkNameChannel(std::string name);
-
-        class  IncorrectChannelName : public std::exception
-		{
-			const char* what() const throw();	
-		};
-        class  AlreadyOnTheChannel : public std::exception
-		{
-			const char* what() const throw();	
-		};
         
 };
 

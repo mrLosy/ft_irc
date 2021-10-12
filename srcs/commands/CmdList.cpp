@@ -1,4 +1,5 @@
 #include "CmdList.hpp"
+#include "Define.hpp"
 
 CmdList::CmdList()
 {
@@ -12,19 +13,15 @@ CmdList::~CmdList()
 
 void CmdList::cmdRun()
 {
-    // if (!_client->getEnterPassword())
-    //     throw CmdList::NoPasswordEntered();
     if (!_client->getRegistered())
-        throw CmdList::NoRegistered();
+        throw ERR_RESTRICTED;
     else
     {
         std::vector<Channel*> channel = _server->getAllChannels();
         for (std::vector<Channel*>::const_iterator i = channel.begin(); i != channel.end(); i++)
         {
-            _client->sendMessageToClient("322 * " + (*i)->getChannelName() + " " + std::to_string((*i)->getClients().size()) + "\r\n");
-            // _client->sendMessageToClient((*i)->getChannelName() + " ");
+            _client->sendMessageToClient(RPL_LIST((*i)->getChannelName(), to_string((*i)->getClients().size())));
         }
-        _client->sendMessageToClient("323 * :End of LIST\r\n");
-        // _client->sendMessageToClient("\n");
+        _client->sendMessageToClient(RPL_LISTEND);
     }
 }

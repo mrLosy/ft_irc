@@ -9,11 +9,6 @@ class CmdPart : public Command
         CmdPart();
         ~CmdPart();
         void cmdRun();
-
-        class  NoSuchChannelException : public std::exception
-		{
-			const char* what() const throw();	
-		};
 };
 
 #endif

@@ -9,10 +9,7 @@ class CmdAway : public Command
         CmdAway();
         ~CmdAway();
         void cmdRun();
-        // class  IncorrectChannelName : public std::exception
-		// {
-		// 	const char* what() const throw();	
-		// };
+        std::string createAway(); 
 };
 
 #endif
